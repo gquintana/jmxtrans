@@ -57,10 +57,28 @@ public class ProcessConfigUtils {
 	 * tree representation of that json.
 	 */
 	public JmxProcess parseProcess(File file) throws IOException {
-		ObjectMapper mapper = file.getName().endsWith(".yml") || file.getName().endsWith(".yaml") ? yamlMapper : jsonMapper;
+		ObjectMapper mapper = getMapper(file);
 		JsonNode jsonNode = mapper.readTree(file);
 		JmxProcess jmx = mapper.treeToValue(jsonNode, JmxProcess.class);
 		jmx.setName(file.getName());
 		return jmx;
+	}
+
+	/**
+	 * Get JSON or YAML object mapper depending on file extension
+     */
+	private ObjectMapper getMapper(File file) {
+		return isYamlFile(file) ? yamlMapper : jsonMapper;
+	}
+
+	private static boolean isYamlFile(File file) {
+		return file.getName().endsWith(".yml") || file.getName().endsWith(".yaml");
+	}
+
+	/**
+	 * Test whether given file is a good candidate as config file
+     */
+	public static boolean isValid(File file) {
+		return file.isFile() && (file.getName().endsWith(".json") || isYamlFile(file));
 	}
 }

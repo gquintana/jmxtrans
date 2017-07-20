@@ -39,6 +39,7 @@ import com.googlecode.jmxtrans.model.Query;
 import com.googlecode.jmxtrans.model.Server;
 import com.googlecode.jmxtrans.model.ValidationException;
 import com.googlecode.jmxtrans.monitoring.ManagedThreadPoolExecutor;
+import com.googlecode.jmxtrans.util.ProcessConfigUtils;
 import com.googlecode.jmxtrans.util.WatchDir;
 import com.googlecode.jmxtrans.util.WatchedCallback;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -484,7 +485,7 @@ public class JmxTransformer implements WatchedCallback {
 			return file.equals(this.configuration.getProcessConfigDirOrFile());
 		}
 
-		return file.isFile() && (file.getName().endsWith(".json") || file.getName().endsWith(".yml") || file.getName().endsWith(".yaml"));
+		return ProcessConfigUtils.isValid(file);
 	}
 
 	@Override
